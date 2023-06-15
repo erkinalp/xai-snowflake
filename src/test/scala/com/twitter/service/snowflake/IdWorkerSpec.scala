@@ -45,7 +45,7 @@ class IdWorkerSpec extends mutable.Specification {
       val datacenterId = 0
       val worker = new IdWorker(workerId, datacenterId)
       (1 to 100).map { _ =>
-        val id = worker.nextId
+        val id = worker.nextId()
         ((id & workerMask) >> 12) must be_==(workerId)
       }
     }
@@ -54,7 +54,7 @@ class IdWorkerSpec extends mutable.Specification {
       val workerId = 0
       val datacenterId = 0x1F
       val worker = new IdWorker(workerId, datacenterId)
-      val id = worker.nextId
+      val id = worker.nextId()
       ((id & datacenterMask) >> 17) must be_==(datacenterId)
     }
 
@@ -63,7 +63,7 @@ class IdWorkerSpec extends mutable.Specification {
       (1 to 100).map { _ =>
         val t = System.currentTimeMillis
         worker.timeMaker = (() => t)
-        val id = worker.nextId
+        val id = worker.nextId()
         ((id & timestampMask) >> 22)  must be_==(t - worker.twepoch)
       }
     }
@@ -78,7 +78,7 @@ class IdWorkerSpec extends mutable.Specification {
       worker.sequence = startSequence
 
       (startSequence to endSequence).map { _ =>
-        val id = worker.nextId
+        val id = worker.nextId()
         ((id & workerMask) >> 12) must be_==(workerId)
       }
     }
@@ -87,7 +87,7 @@ class IdWorkerSpec extends mutable.Specification {
       val worker = new IdWorker(1, 1)
       var lastId = 0L
       (1 to 100).map { _ =>
-        val id = worker.nextId
+        val id = worker.nextId()
         val ret = id must be_>(lastId)
         lastId = id
         ret
@@ -98,7 +98,7 @@ class IdWorkerSpec extends mutable.Specification {
       val worker = new IdWorker(31, 31)
       val t = System.currentTimeMillis
       for (i <- 1 to 1000000) {
-        val id = worker.nextId
+        val id = worker.nextId()
         id
       }
       val t2 = System.currentTimeMillis
@@ -109,7 +109,7 @@ class IdWorkerSpec extends mutable.Specification {
     "sleep if we would rollover twice in the same millisecond" in {
       val worker = new WakingIdWorker(1, 1)
       val iter = List(2L, 2L, 3L).iterator
-      worker.timeMaker = (() => iter.next)
+      worker.timeMaker = (() => iter.next())
       worker.sequence = 4095
       worker.nextId
       worker.sequence = 4095
@@ -122,7 +122,7 @@ class IdWorkerSpec extends mutable.Specification {
       val set = new scala.collection.mutable.HashSet[Long]()
       val n = 2000000
       for (i <- 1 to n) {
-        val id = worker.nextId
+        val id = worker.nextId()
         if (set.contains(id)) {
           println(java.lang.Long.toString(id, 2))
         } else {
