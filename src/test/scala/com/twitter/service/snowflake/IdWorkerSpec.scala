@@ -29,7 +29,7 @@ class IdWorkerSpec extends mutable.Specification {
 
     var time = 1L
 
-    override def timeGen = time + twepoch
+    override def timeGen() = time + twepoch
   }
 
   "IdWorker" >> {
