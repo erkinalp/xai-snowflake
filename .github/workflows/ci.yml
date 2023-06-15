@@ -9,10 +9,10 @@ jobs:
       fail-fast: false
       matrix:
         jdk: [ adopt@1.11 ]
-        scala: [ 2.12.16 ]
+        scala: [ 2.13.10 ]
     steps:
       - uses: actions/checkout@v3
-      - uses: olafurpg/setup-scala@v12
+      - uses: olafurpg/setup-scala@v13
         with:
           java-version: ${{ matrix.jdk }}
       - run: sbt -v ++${{ matrix.scala }} test
