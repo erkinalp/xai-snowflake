@@ -111,9 +111,9 @@ class IdWorkerSpec extends mutable.Specification {
       val iter = List(2L, 2L, 3L).iterator
       worker.timeMaker = (() => iter.next())
       worker.sequence = 4095
-      worker.nextId
+      worker.nextId()
       worker.sequence = 4095
-      worker.nextId
+      worker.nextId()
       worker.slept must be_==(1)
     }
 
@@ -134,7 +134,7 @@ class IdWorkerSpec extends mutable.Specification {
 
     "generate ids over 50 billion" in {
       val worker = new IdWorker(0, 0)
-      worker.nextId must be_>(50000000000L)
+      worker.nextId() must be_>(50000000000L)
     }
 
     "generate only unique ids, even when time goes backwards" in {
@@ -145,13 +145,13 @@ class IdWorkerSpec extends mutable.Specification {
       // first we generate 2 ids with the same time, so that we get the sequqence to 1
       worker.sequence must be_==(0)
       worker.time     must be_==(1)
-      val id1 = worker.nextId
+      val id1 = worker.nextId()
       (id1 >> 22) must be_==(1)
       (id1 & sequenceMask) must be_==(0)
 
       worker.sequence must be_==(0)
       worker.time     must be_==(1)
-      val id2 = worker.nextId
+      val id2 = worker.nextId()
       (id2 >> 22) must be_==(1)
       (id2 & sequenceMask) must be_==(1)
 
@@ -159,11 +159,11 @@ class IdWorkerSpec extends mutable.Specification {
 
       worker.time = 0
       worker.sequence must be_==(1)
-      worker.nextId must throwA[InvalidSystemClock]
+      worker.nextId() must throwA[InvalidSystemClock]
       worker.sequence must be_==(1) // this used to get reset to 0, which would cause conflicts
 
       worker.time = 1
-      val id3 = worker.nextId
+      val id3 = worker.nextId()
       (id3 >> 22) must be_==(1)
       (id3 & sequenceMask ) must be_==(2)
     }
