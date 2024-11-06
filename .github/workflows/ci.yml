@@ -17,4 +17,5 @@ jobs:
           distribution: temurin
           java-version: ${{ matrix.jdk }}
           cache: sbt
+      - uses: sbt/setup-sbt@v1
       - run: sbt -v ++${{ matrix.scala }} test
