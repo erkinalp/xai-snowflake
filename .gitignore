@@ -1,0 +1,21 @@
+# SBT build artifacts
+target/
+project/target/
+project/project/
+
+# Scala/SBT specific
+*.class
+*.log
+.cache
+.history
+.lib/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.metals/
+.bloop/
+
+# OS files
+.DS_Store
